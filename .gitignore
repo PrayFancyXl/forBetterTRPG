@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (frontend)
+node_modules/
+frontend/dist/
+
+# markitdown subfolder (has its own git)
+markitdown/
+
+# Large original data files (PDFs)
+originData/*.pdf
+
+# Keep Excel template tracked (small file, important for the project)
+!originData/*.xlsx
+
+# Data outputs (regeneratable)
+data/markdown/
+data/knowledge/
+
+# Logs
+*.log
