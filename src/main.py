@@ -6,6 +6,7 @@ from .routes.character import router as character_router
 from .routes.validation import router as validation_router
 from .routes.knowledge import router as knowledge_router
 from .routes.chat import router as chat_router
+from .routes.export import router as export_router
 
 app = FastAPI(title="forBetterTRPG", version="0.2.0", description="狩魂者TRPG AI建卡器后端")
 
@@ -21,6 +22,7 @@ app.include_router(character_router)
 app.include_router(validation_router)
 app.include_router(knowledge_router)
 app.include_router(chat_router)
+app.include_router(export_router)
 
 
 @app.on_event("startup")

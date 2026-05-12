@@ -10,6 +10,7 @@ import Step4Attributes from './components/steps/Step4Attributes.vue'
 import Step5Skills from './components/steps/Step5Skills.vue'
 import Step6Abilities from './components/steps/Step6Abilities.vue'
 import ChatPanel from './components/ChatPanel.vue'
+import CardPreview from './components/CardPreview.vue'
 import ValidationFeedback from './components/ValidationFeedback.vue'
 
 const store = useCharacterStore()
@@ -21,6 +22,44 @@ onMounted(async () => {
   await store.createSession()
   await chatStore.loadTip(1)
 })
+
+async function exportJson() {
+  if (!store.session) return
+  const res = await fetch(`/api/export/json/${store.session.id}`, { method: 'POST' })
+  const blob = await res.blob()
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `character_${store.session.id.slice(0, 8)}.json`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+async function exportExcel() {
+  if (!store.session) return
+  const res = await fetch(`/api/export/excel/${store.session.id}`, { method: 'POST' })
+  const blob = await res.blob()
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `character_${store.session.id.slice(0, 8)}.xlsx`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+async function importJson(event: Event) {
+  const input = event.target as HTMLInputElement
+  if (!input.files?.length) return
+  const file = input.files[0]
+  const formData = new FormData()
+  formData.append('file', file)
+  const res = await fetch('/api/export/import/json', { method: 'POST', body: formData })
+  if (res.ok) {
+    const data = await res.json()
+    store.session = await (await fetch(`/api/sessions/${data.session_id}`)).json()
+  }
+  input.value = ''
+}
 </script>
 
 <template>
@@ -45,9 +84,19 @@ onMounted(async () => {
         <Step4Attributes v-if="currentStep === 4" />
         <Step5Skills v-if="currentStep === 5" />
         <Step6Abilities v-if="currentStep === 6" />
+
+        <div class="export-bar" v-if="store.completedSteps.length > 0">
+          <button class="export-btn" @click="exportJson">导出 JSON</button>
+          <button class="export-btn" @click="exportExcel">导出 Excel</button>
+          <label class="import-btn">
+            导入 JSON
+            <input type="file" accept=".json" @change="importJson" hidden />
+          </label>
+        </div>
       </main>
 
       <aside class="chat-sidebar">
+        <CardPreview />
         <ChatPanel />
       </aside>
     </div>
@@ -135,5 +184,29 @@ body {
   .main-layout {
     grid-template-columns: 1fr;
   }
+}
+
+.export-bar {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #2a2a4a;
+}
+
+.export-btn, .import-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #2a2a4a;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.export-btn:hover, .import-btn:hover {
+  border-color: #a855f7;
+  color: #a855f7;
 }
 </style>
