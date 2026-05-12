@@ -36,11 +36,11 @@ export const api = {
     return request(`/chat/tip/${step}`)
   },
 
-  async *chatStream(sessionId: string, message: string, step: number): AsyncGenerator<string> {
+  async *chatStream(sessionId: string, message: string, step: number, model: string = 'deepseek-v4-flash'): AsyncGenerator<string> {
     const res = await fetch(`${BASE_URL}/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ session_id: sessionId, message, step }),
+      body: JSON.stringify({ session_id: sessionId, message, step, model }),
     })
     if (!res.ok) throw new Error(`Chat error: ${res.status}`)
     const reader = res.body!.getReader()
@@ -55,9 +55,12 @@ export const api = {
       buffer = lines.pop() || ''
       for (const line of lines) {
         if (line.startsWith('data: ')) {
-          const data = line.slice(6)
-          if (data === '[DONE]') return
-          yield data
+          const raw = line.slice(6).trim()
+          if (!raw || raw === '[DONE]') {
+            if (raw === '[DONE]') return
+            continue
+          }
+          yield JSON.parse(raw)
         }
       }
     }

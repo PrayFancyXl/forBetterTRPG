@@ -3,8 +3,7 @@ from __future__ import annotations
 import json
 from typing import AsyncGenerator
 
-from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage, SystemMessage
+import openai
 
 from ..config import settings
 from ..models.enums import CreationStep
@@ -34,6 +33,8 @@ SYSTEM_PROMPT_BASE = """你是《狩魂者TRPG》的建卡助手。你的职责�
 2. 如果涉及具体数值，给出准确数据
 3. 如果玩家在犹豫选择，分析各选项的优劣
 4. 适当给出角色发展方向的建议
+5. 输出列表时使用 `-` 作为列表符号，不要使用 `*`
+6. 输出表格时，每行必须独立换行，使用标准 Markdown 表格格式，分隔行（`:---`）必须单独占一行
 """
 
 
@@ -55,18 +56,17 @@ def _build_step_context(step: CreationStep) -> str:
     return "\n".join(context_parts)
 
 
-def _get_llm() -> ChatOpenAI:
-    return ChatOpenAI(
-        model=settings.DEEPSEEK_MODEL,
-        base_url=settings.DEEPSEEK_BASE_URL,
+def _get_client() -> openai.AsyncOpenAI:
+    import httpx
+    http_client = httpx.AsyncClient(proxy=settings.HTTP_PROXY) if settings.HTTP_PROXY else None
+    return openai.AsyncOpenAI(
         api_key=settings.DEEPSEEK_API_KEY,
-        streaming=True,
-        temperature=0.7,
-        max_tokens=1024,
+        base_url=settings.DEEPSEEK_BASE_URL,
+        http_client=http_client,
     )
 
 
-def build_messages(user_message: str, step: CreationStep, chat_history: list[dict] = None) -> list:
+def build_messages(user_message: str, step: CreationStep, chat_history: list[dict] = None) -> list[dict]:
     step_context = _build_step_context(step)
     step_names = {
         CreationStep.SPIRIT_POWER: "灵能力创建",
@@ -78,28 +78,31 @@ def build_messages(user_message: str, step: CreationStep, chat_history: list[dic
     }
 
     system_content = SYSTEM_PROMPT_BASE + f"\n\n当前玩家正在进行：{step_names.get(step, '建卡')}\n\n相关规则数据：{step_context}"
-
-    messages = [SystemMessage(content=system_content)]
+    messages: list[dict] = [{"role": "system", "content": system_content}]
 
     if chat_history:
         for msg in chat_history[-10:]:
-            if msg["role"] == "user":
-                messages.append(HumanMessage(content=msg["content"]))
-            else:
-                from langchain_core.messages import AIMessage
-                messages.append(AIMessage(content=msg["content"]))
+            messages.append({"role": msg["role"], "content": msg["content"]})
 
-    messages.append(HumanMessage(content=user_message))
+    messages.append({"role": "user", "content": user_message})
     return messages
 
 
-async def chat_stream(user_message: str, step: CreationStep, chat_history: list[dict] = None) -> AsyncGenerator[str, None]:
-    llm = _get_llm()
+async def chat_stream(user_message: str, step: CreationStep, chat_history: list[dict] = None, model: str = None) -> AsyncGenerator[str, None]:
+    client = _get_client()
     messages = build_messages(user_message, step, chat_history)
 
-    async for chunk in llm.astream(messages):
-        if chunk.content:
-            yield chunk.content
+    stream = await client.chat.completions.create(
+        model=model or settings.DEEPSEEK_MODEL,
+        messages=messages,
+        stream=True,
+        temperature=0.7,
+        max_tokens=1024,
+    )
+    async for chunk in stream:
+        delta = chunk.choices[0].delta.content
+        if delta:
+            yield delta
 
 
 def get_contextual_tip(step: CreationStep) -> str:

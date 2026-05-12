@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from sse_starlette.sse import EventSourceResponse
+import json
 
 from ..models.enums import CreationStep
 from ..services.ai_service import chat_stream, get_contextual_tip
@@ -14,6 +15,7 @@ class ChatRequest(BaseModel):
     session_id: str
     message: str
     step: int = 1
+    model: str = "deepseek-v4-flash"
 
 
 @router.post("")
@@ -24,9 +26,9 @@ async def chat(request: ChatRequest):
 
     async def event_generator():
         full_response = ""
-        async for token in chat_stream(request.message, step, history):
+        async for token in chat_stream(request.message, step, history, request.model):
             full_response += token
-            yield {"data": token}
+            yield {"data": json.dumps(token, ensure_ascii=False)}
         history.append({"role": "assistant", "content": full_response})
         yield {"data": "[DONE]"}
 

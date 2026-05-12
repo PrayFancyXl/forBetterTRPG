@@ -44,10 +44,11 @@ forBetterTRPG/
 # 激活虚拟环境
 .venv\Scripts\activate  # Windows
 
-# 启动后端（端口8000）
-uvicorn src.main:app --reload --port 8000
+# 启动后端（端口8003）
+uvicorn src.main:app --reload --port 8003
 
-# 启动前端（端口3000，自动代理/api到后端）
+# 启动前端（端口3000，自动代理/api到后端8003）
+# 注意：npm命令需在用户终端执行，Claude Code bash子进程找不到node
 cd frontend && npm run dev
 
 # 文档转换
@@ -66,17 +67,28 @@ ruff format .
 `.env` 文件（项目根目录）：
 ```
 DEEPSEEK_API_KEY=sk-xxxxx
+HTTP_PROXY=http://127.0.0.1:7890
 ```
 
 ## 当前状态
 
 - Phase 1 ✅ 文档转换 + 知识库生成
-- Phase 2 Stage A-C ✅ 后端核心 + AI集成 + 前端框架
-- Phase 2 Stage D ⏳ 完善Step5/Step6/CardPreview
-- Phase 2 Stage E ⏳ 导出功能（JSON + Excel）
-- 前端UI优化 ⏳ D/E完成后统一优化
+- Phase 2 Stage A-E ✅ 后端核心 + AI集成 + 前端框架 + 完善步骤 + 导出功能
+- Phase 2 Stage F ✅ DeepSeek API接入修复（代理、模型名、SSE）
+- Phase 2 Stage G ✅ ChatPanel Markdown渲染优化
+- 前端UI优化 ⏳ 下一阶段
 
 详细进度和待办事项见 `docs/PROJECT_KNOWLEDGE.md`
+
+## 经验文档
+
+`docs/troubleshooting.md` — 已解决问题的排查记录，包含：
+- DeepSeek API 连接问题（代理配置、base_url、openai SDK用法）
+- DeepSeek 模型名称（v4-flash/v4-pro，旧名废弃时间）
+- SSE 流式输出 + Markdown 渲染问题（token含\n导致截流、表格压缩、white-space冲突）
+- System Prompt 规范输出格式的最佳实践
+
+**遇到 AI 对话、SSE、Markdown 渲染相关问题时，优先查阅此文档。**
 
 ## 开发规范
 
