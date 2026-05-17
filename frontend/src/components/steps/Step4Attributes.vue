@@ -96,64 +96,94 @@ const unlocked = computed(() => lastValidation.value?.unlocked ?? null)
 <style scoped>
 .step-container { max-width: 700px; }
 
-h2 { color: #a855f7; margin-bottom: 8px; }
+h2 {
+  font-family: var(--font-title);
+  color: var(--accent-primary);
+  margin-bottom: var(--space-sm);
+}
 
-.desc { color: #999; margin-bottom: 20px; font-size: 0.9rem; }
+.desc {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-lg);
+  font-size: 0.9rem;
+}
 
 .attributes-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
 }
 
 .attr-card {
-  background: #1a1a2e;
-  border: 1px solid #2a2a4a;
-  border-radius: 10px;
-  padding: 16px;
+  background: rgba(15, 25, 35, 0.4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  transition: all var(--transition-normal);
+}
+
+.attr-card:hover {
+  border-color: var(--border-glow);
+  box-shadow: 0 0 12px rgba(209, 196, 233, 0.06);
 }
 
 .attr-card label {
+  font-family: var(--font-title);
   font-size: 1.1rem;
-  font-weight: bold;
-  color: #a855f7;
+  font-weight: 700;
+  color: var(--accent-primary);
 }
 
 .attr-hint {
   font-size: 0.75rem;
-  color: #888;
-  margin: 6px 0 10px;
+  color: var(--text-muted);
+  margin: var(--space-xs) 0 var(--space-sm);
 }
 
 .attr-card select {
   width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #2a2a4a;
-  background: #16213e;
-  color: #e0e0e0;
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  border: none;
+  border-bottom: 1px solid var(--border-glow);
+  background: rgba(15, 25, 35, 0.5);
+  color: var(--text-primary);
+  font-family: var(--font-body);
   font-size: 1rem;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23A0A0B8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+  transition: all var(--transition-normal);
+}
+
+.attr-card select:focus {
+  border-bottom-color: var(--accent-primary);
+  box-shadow: 0 1px 0 0 var(--accent-primary);
 }
 
 .unlocked-info {
-  background: #0f3460;
-  border: 1px solid #3b82f6;
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 20px;
+  background: var(--info-bg);
+  border: 1px solid rgba(129, 212, 250, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
 }
 
 .unlocked-info h3 {
-  color: #93c5fd;
-  margin-bottom: 12px;
+  color: var(--info);
+  margin-bottom: var(--space-sm);
   font-size: 0.95rem;
 }
 
 .info-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: var(--space-sm);
 }
 
 .info-item {
@@ -162,20 +192,27 @@ h2 { color: #a855f7; margin-bottom: 8px; }
   gap: 2px;
 }
 
-.info-label { font-size: 0.8rem; color: #888; }
-.info-value { font-size: 1rem; font-weight: bold; color: #e0e0e0; }
+.info-label { font-size: 0.8rem; color: var(--text-muted); }
+.info-value { font-size: 1rem; font-weight: 600; color: var(--text-primary); }
 
 .submit-btn {
-  padding: 12px 32px;
-  border-radius: 8px;
-  border: none;
-  background: #a855f7;
-  color: white;
-  font-size: 1rem;
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-glow);
+  background: transparent;
+  color: var(--accent-primary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: opacity 0.2s;
+  box-shadow: var(--shadow-glow);
+  transition: all var(--transition-normal);
 }
 
-.submit-btn:hover { opacity: 0.9; }
-.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.submit-btn:hover {
+  background: rgba(209, 196, 233, 0.08);
+  border-color: var(--accent-muted);
+  box-shadow: var(--shadow-glow-active);
+}
+
+.submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 </style>

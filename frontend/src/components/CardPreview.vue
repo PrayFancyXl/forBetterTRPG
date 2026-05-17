@@ -94,46 +94,46 @@ const char = computed(() => store.character)
 
 <style scoped>
 .card-preview {
-  padding: 16px;
+  padding: var(--space-md);
 }
 
 h3 {
-  color: #a855f7;
+  font-family: var(--font-title);
+  color: var(--accent-primary);
   font-size: 1rem;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #2a2a4a;
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .preview-section {
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #1a1a2e;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .section-title {
-  font-size: 0.8rem;
-  color: #a855f7;
-  font-weight: bold;
-  margin-bottom: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: 0.75rem;
+  color: var(--accent-secondary);
+  font-weight: 500;
+  margin-bottom: var(--space-xs);
+  letter-spacing: 0.05em;
 }
 
 .field {
   font-size: 0.85rem;
-  color: #ccc;
+  color: var(--text-secondary);
   margin-bottom: 2px;
 }
 
 .label {
-  color: #888;
+  color: var(--text-muted);
 }
 
 .tag {
   display: inline-block;
-  background: #2d1b69;
-  color: #c4b5fd;
+  background: var(--accent-dim);
+  color: var(--accent-primary);
   padding: 1px 8px;
   border-radius: 10px;
   font-size: 0.75rem;
@@ -142,39 +142,40 @@ h3 {
 
 .attr-row {
   display: flex;
-  gap: 12px;
+  gap: var(--space-sm);
 }
 
 .attr-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #1a1a2e;
-  border-radius: 6px;
-  padding: 6px 12px;
+  background: rgba(15, 25, 35, 0.4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-sm);
 }
 
-.attr-label { font-size: 0.7rem; color: #888; }
-.attr-value { font-size: 1.1rem; font-weight: bold; color: #e0e0e0; }
+.attr-label { font-size: 0.7rem; color: var(--text-muted); }
+.attr-value { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
 
 .chip-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: var(--space-xs);
 }
 
 .chip {
-  background: #1a1a2e;
-  border: 1px solid #2a2a4a;
+  background: rgba(15, 25, 35, 0.4);
+  border: 1px solid var(--border-subtle);
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 0.75rem;
-  color: #ccc;
+  color: var(--text-secondary);
 }
 
 .empty-state {
   text-align: center;
-  color: #555;
+  color: var(--text-muted);
   font-size: 0.85rem;
   margin-top: 30px;
 }

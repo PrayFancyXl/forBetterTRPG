@@ -27,26 +27,27 @@ const currentValidation = computed(() => {
 
 <style scoped>
 .feedback {
-  border-radius: 8px;
-  padding: 10px 14px;
-  margin-bottom: 12px;
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-sm);
 }
 
 .errors {
-  background: #3b1111;
-  border: 1px solid #ef4444;
+  background: var(--error-bg);
+  border: 1px solid rgba(229, 115, 115, 0.2);
 }
 
 .warnings {
-  background: #3b2f11;
-  border: 1px solid #f59e0b;
+  background: var(--warning-bg);
+  border: 1px solid rgba(255, 183, 77, 0.2);
 }
 
 .feedback-item {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   padding: 2px 0;
+  color: var(--text-primary);
 }
 
-.errors .icon { color: #ef4444; }
-.warnings .icon { color: #f59e0b; }
+.errors .icon { color: var(--error); }
+.warnings .icon { color: var(--warning); }
 </style>

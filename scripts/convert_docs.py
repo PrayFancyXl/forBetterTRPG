@@ -18,7 +18,6 @@ OUTPUT_DIR = PROJECT_ROOT / "data" / "markdown"
 FILES_MAP = {
     "core_rules.md": "狩魂者TRPG核心规则-电子版（资源部分二三四章）.pdf",
     "card_tutorial.md": "狩魂者车卡教学v1.pdf",
-    "fillable_card.md": "狩魂者可填写卡（正式版）.pdf",
     "blank_card.md": "狩魂者空白卡正式版V1.4.xlsx",
 }
 

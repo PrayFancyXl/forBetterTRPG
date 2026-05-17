@@ -20,6 +20,12 @@ export const useCharacterStore = defineStore('character', () => {
     }
   }
 
+  function goToStep(step: number) {
+    if (!session.value) return
+    if (step < 1 || step > 6) return
+    session.value.current_step = step
+  }
+
   async function submitStep(step: number, data: any): Promise<ValidationResult> {
     if (!session.value) throw new Error('No session')
     loading.value = true
@@ -32,5 +38,5 @@ export const useCharacterStore = defineStore('character', () => {
     }
   }
 
-  return { session, loading, currentStep, character, completedSteps, createSession, submitStep }
+  return { session, loading, currentStep, character, completedSteps, createSession, goToStep, submitStep }
 })

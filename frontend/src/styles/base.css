@@ -1,0 +1,130 @@
+/* 全局基础样式 — 以太水墨 */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background-color: var(--bg-deep);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(26, 42, 58, 0.8) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(30, 52, 72, 0.6) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 100%, rgba(44, 62, 80, 0.4) 0%, transparent 50%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  line-height: 1.6;
+  position: relative;
+}
+
+/* 背景渐变呼吸动画 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(179, 157, 219, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(206, 147, 216, 0.02) 0%, transparent 40%);
+  animation: breathe 12s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes breathe {
+  0% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* SVG noise 纹理叠加 */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* 确保内容在背景效果之上 */
+#app {
+  position: relative;
+  z-index: 1;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-glow);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-muted);
+}
+
+/* 选中文字 */
+::selection {
+  background: rgba(209, 196, 233, 0.2);
+  color: var(--text-primary);
+}
+
+/* 链接 */
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--accent-bright);
+}
+
+/* 标题字体 */
+h1, h2, h3 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+h4, h5, h6 {
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+/* 通用过渡 */
+button, input, textarea, select {
+  transition: all var(--transition-normal);
+}
+
+/* 焦点可见性 */
+:focus-visible {
+  outline: 2px solid var(--accent-muted);
+  outline-offset: 2px;
+}

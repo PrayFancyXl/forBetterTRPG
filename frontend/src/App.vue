@@ -3,6 +3,7 @@ import { onMounted, computed } from 'vue'
 import { useCharacterStore } from './stores/character'
 import { useChatStore } from './stores/chat'
 import StepNavigation from './components/StepNavigation.vue'
+import SoulParticles from './components/SoulParticles.vue'
 import Step1SpiritPower from './components/steps/Step1SpiritPower.vue'
 import Step2Bond from './components/steps/Step2Bond.vue'
 import Step3CharacterInfo from './components/steps/Step3CharacterInfo.vue'
@@ -63,6 +64,7 @@ async function importJson(event: Event) {
 </script>
 
 <template>
+  <SoulParticles />
   <div class="app-container" v-if="store.session">
     <header class="app-header">
       <h1>狩魂者TRPG 建卡器</h1>
@@ -105,70 +107,67 @@ async function importJson(event: Event) {
 </template>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #1a1a2e;
-  color: #e0e0e0;
-  min-height: 100vh;
-}
-
 .app-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: var(--space-lg);
 }
 
 .app-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-lg);
 }
 
 .app-header h1 {
-  color: #a855f7;
+  font-family: var(--font-title);
   font-size: 1.8rem;
+  color: var(--accent-primary);
+  letter-spacing: 0.05em;
 }
 
 .main-layout {
   display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 20px;
-  margin-top: 20px;
+  grid-template-columns: 1fr 380px;
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
 }
 
 .content-area {
-  background: #16213e;
-  border-radius: 12px;
-  padding: 24px;
-  border: 1px solid #2a2a4a;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-panel);
 }
 
 .chat-sidebar {
-  background: #16213e;
-  border-radius: 12px;
-  border: 1px solid #2a2a4a;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-panel);
   display: flex;
   flex-direction: column;
-  max-height: 80vh;
+  max-height: 85vh;
+  position: sticky;
+  top: var(--space-lg);
 }
 
 .tip-bar {
-  background: #1e3a5f;
-  border: 1px solid #3b82f6;
-  border-radius: 8px;
-  padding: 10px 14px;
-  margin-bottom: 16px;
-  font-size: 0.9rem;
-  color: #93c5fd;
+  background: var(--info-bg);
+  border: 1px solid rgba(129, 212, 250, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
+  font-size: 0.85rem;
+  color: var(--info);
 }
 
 .tip-icon {
-  margin-right: 6px;
+  margin-right: var(--space-xs);
 }
 
 .loading {
@@ -176,37 +175,46 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  font-family: var(--font-title);
   font-size: 1.2rem;
-  color: #a855f7;
+  color: var(--accent-primary);
+}
+
+.export-bar {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.export-btn,
+.import-btn {
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-glow);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.export-btn:hover,
+.import-btn:hover {
+  border-color: var(--accent-muted);
+  color: var(--accent-primary);
+  box-shadow: var(--shadow-glow);
 }
 
 @media (max-width: 900px) {
   .main-layout {
     grid-template-columns: 1fr;
   }
-}
-
-.export-bar {
-  display: flex;
-  gap: 10px;
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid #2a2a4a;
-}
-
-.export-btn, .import-btn {
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: 1px solid #2a2a4a;
-  background: #1a1a2e;
-  color: #e0e0e0;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.export-btn:hover, .import-btn:hover {
-  border-color: #a855f7;
-  color: #a855f7;
+  .chat-sidebar {
+    position: static;
+    max-height: none;
+  }
 }
 </style>

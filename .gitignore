@@ -34,8 +34,9 @@ frontend/dist/
 # markitdown subfolder (has its own git)
 markitdown/
 
-# Large original data files (PDFs)
+# Large original data files (PDFs) and reference HTML
 originData/*.pdf
+originData/*.html
 
 # Keep Excel template tracked (small file, important for the project)
 !originData/*.xlsx
